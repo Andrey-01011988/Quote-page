@@ -14,10 +14,26 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env_path = BASE_DIR / '.env'
+print(f"Looking for .env at: {env_path}")
+print(f".env exists: {env_path.exists()}")
+
+if env_path.exists():
+    load_dotenv(dotenv_path=env_path)
+else:
+    print("WARNING: .env file not found!")
+
+# print("=" * 50)
+# print("DEBUG ENV VARIABLES CHECK:")
+# print(f"DEBUG: {os.getenv('DEBUG')}")
+# print(f"SECRET_KEY: {os.getenv('SECRET_KEY')}")
+# print(f"ALLOWED_HOSTS: {os.getenv('ALLOWED_HOSTS')}")
+# print(f"DATABASE_ENGINE: {os.getenv('DATABASE_ENGINE')}")
+# print("=" * 50)
 
 
 # Quick-start development settings - unsuitable for production
@@ -29,7 +45,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key-for-development')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host.strip()]
 
 
 # Application definition
@@ -140,7 +156,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 
 # Media files
-MEDIA_URL = '/media/''ru-ru'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
