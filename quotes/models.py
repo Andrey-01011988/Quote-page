@@ -41,7 +41,7 @@ class Quote(models.Model):
         like_ratio(): Рассчет коэффициента лайков
         save(): Полная валидация при сохранении
     """
-    text = models.CharField(max_length=1000, unique=True)
+    text = models.TextField()
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
     weight = models.IntegerField(
         default=1,
@@ -55,20 +55,28 @@ class Quote(models.Model):
     dislikes = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['text'],
+                name='unique_quote_text',
+                condition=models.Q(text__isnull=False)
+            )
+        ]
 
     def __str__(self):
         # Вывод информации о цитате
         return f'"{self.text[:50]}..." - {self.source}'
 
     def like_ratio(self):
-        # Рассчет коэффициента лайков        
+        # Рассчет коэффициента лайков
         total = self.likes + self.dislikes
         return self.likes / total if total > 0 else 0
-    
+
     def save(self, *args, **kwargs):
         """
         Выполняем полную валидацию при сохранении
         """
         self.full_clean()
         super().save(*args, **kwargs)
-    
+
