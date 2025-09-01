@@ -41,7 +41,7 @@ class Quote(models.Model):
         like_ratio(): Рассчет коэффициента лайков
         save(): Полная валидация при сохранении
     """
-    text = models.TextField(unique=True)
+    text = models.CharField(max_length=1000, unique=True)
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
     weight = models.IntegerField(
         default=1,
