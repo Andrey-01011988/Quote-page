@@ -1,0 +1,101 @@
+{% extends 'quotes/base.html' %}
+
+{% block title %}Добавить цитату - Цитатник{% endblock %}
+
+{% block header %}Добавить новую цитату{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="success">{{ message }}</div>
+            {% else %}
+                <div class="error">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% if form.non_field_errors %}
+        <div class="error">
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.text.id_for_label }}">Текст цитаты:</label>
+            {{ form.text }}
+            {% if form.text.errors %}
+                <div class="error">{{ form.text.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.source_name.id_for_label }}">Название источника:</label>
+            {{ form.source_name }}
+            {% if form.source_name.errors %}
+                <div class="error">{{ form.source_name.errors }}</div>
+            {% endif %}
+            <small class="form-text">Максимум 3 цитаты на один источник</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.source_type.id_for_label }}">Тип источника:</label>
+            {{ form.source_type }}
+            {% if form.source_type.errors %}
+                <div class="error">{{ form.source_type.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.weight.id_for_label }}">Вес цитаты (чем больше, тем чаще показывается):</label>
+            {{ form.weight }}
+            {% if form.weight.errors %}
+                <div class="error">{{ form.weight.errors }}</div>
+            {% endif %}
+            <small class="form-text">Диапазон: от 1 до 10</small>
+        </div>
+        
+        <button type="submit" class="btn-primary">Добавить цитату</button>
+    </form>
+
+    <div style="margin-top: 30px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+        <h3>Правила добавления цитат:</h3>
+        <ul>
+            <li>Текст цитаты должен быть уникальным</li>
+            <li>Один источник может содержать не более 3 цитат</li>
+            <li>Вес цитаты определяет частоту её показа (чем больше, тем чаще)</li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+    .error {
+        color: #dc3545;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+    }
+    .success {
+        color: #155724;
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+    }
+    .form-text {
+        color: #6c757d;
+        font-size: 0.875em;
+        margin-top: 5px;
+        display: block;
+    }
+</style>
+{% endblock %}

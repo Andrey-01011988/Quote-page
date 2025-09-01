@@ -1,0 +1,46 @@
+{% extends 'quotes/base.html' %}
+
+{% block title %}Случайная цитата - Цитатник{% endblock %}
+
+{% block header %}Случайная цитата{% endblock %}
+
+{% block content %}
+    {% if quote %}
+    <div class="quote">
+        <blockquote>{{ quote.text }}</blockquote>
+        <p class="source">- {{ quote.source.name }} ({{ quote.source.get_type_display }})</p>
+        <p class="stats">Просмотров: {{ quote.views }} | Лайков: {{ quote.likes }} | Дизлайков: {{ quote.dislikes }}</p>
+        
+        <div class="buttons">
+            <button onclick="likeQuote({{ quote.id }})">👍 {{ quote.likes }}</button>
+            <button onclick="dislikeQuote({{ quote.id }})">👎 {{ quote.dislikes }}</button>
+        </div>
+    </div>
+    {% else %}
+    <div class="no-quotes">
+        <p>Цитат пока нет. <a href="{% url 'add_quote' %}">Добавить первую</a></p>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+function likeQuote(quoteId) {
+    fetch(`/like/${quoteId}/`)
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector(`button[onclick="likeQuote(${quoteId})"]`).textContent = `👍 ${data.likes}`;
+            document.querySelector(`button[onclick="dislikeQuote(${quoteId})"]`).textContent = `👎 ${data.dislikes}`;
+        });
+}
+
+function dislikeQuote(quoteId) {
+    fetch(`/dislike/${quoteId}/`)
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector(`button[onclick="likeQuote(${quoteId})"]`).textContent = `👍 ${data.likes}`;
+            document.querySelector(`button[onclick="dislikeQuote(${quoteId})"]`).textContent = `👎 ${data.dislikes}`;
+        });
+}
+</script>
+{% endblock %}

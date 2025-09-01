@@ -1,0 +1,19 @@
+echo "# Quote Project" > README.md
+echo "Django project for displaying random quotes from movies and books" >> README.md
+
+
+poetry help
+poetry list
+poetry about
+poetry install
+poetry lock
+poetry check
+poetry show
+
+
+django-admin startproject quote_project .
+python manage.py startapp quotes
+
+
+printf "\n\n%s\n" "/home/uservm/Employers_test_assignments/IT_Solutions/Quotes_page/pyproject.toml" >> proj_for_refactoring_2.txt
+cat pyproject.toml >> proj_for_refactoring_2.txt
