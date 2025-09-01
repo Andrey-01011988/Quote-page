@@ -1,2 +1,3 @@
 # Quote Project
-Django project for displaying random quotes from movies and books
+Django project for displaying random quotes from movies, books and other
+ 
